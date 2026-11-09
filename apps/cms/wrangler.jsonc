@@ -4,6 +4,7 @@
   "name": "duy-digital-cms",
   "account_id": "434cdc143e04717ff56f9970473b0f51",
   "compatibility_date": "2025-08-15",
+  "observability": { "enabled": true, "head_sampling_rate": 1 },
   "vars": {
     "SITE_URL": "https://duy.digital",
     "PAYLOAD_PUBLIC_SERVER_URL": "https://cms.duy.digital"

@@ -4,6 +4,7 @@
   "account_id": "434cdc143e04717ff56f9970473b0f51",
   "main": "src/index.ts",
   "compatibility_date": "2025-08-15",
+  "observability": { "enabled": true, "head_sampling_rate": 1 },
   "vars": {
     "ALLOWED_ORIGINS": "https://duy.digital,https://www.duy.digital,http://localhost:4321",
     "CMS_URL": "https://cms.duy.digital"

@@ -2,6 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
   "name": "duy-digital-cms",
+  "account_id": "434cdc143e04717ff56f9970473b0f51",
   "compatibility_date": "2025-08-15",
   "vars": {
     "SITE_URL": "https://duy.digital",
@@ -15,6 +16,7 @@
     // see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#global-fetch-strictly-public
     "global_fetch_strictly_public",
   ],
+  "routes": [{ "pattern": "cms.duy.digital", "custom_domain": true }],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS",
@@ -22,7 +24,7 @@
   "d1_databases": [
     {
       "binding": "D1",
-      "database_id": "DATABASE_ID",
+      "database_id": "500dcc85-dac0-4fe6-afc0-3bff6a4f8849",
       "database_name": "duy-digital",
       "remote": true,
     },
@@ -54,7 +56,7 @@
   //     "d1_databases": [
   //       {
   //         "binding": "D1",
-  //         "database_id": "DATABASE_ID",
+  //         "database_id": "500dcc85-dac0-4fe6-afc0-3bff6a4f8849",
   //         "database_name": "my-app-staging",
   //         "remote": true
   //       }

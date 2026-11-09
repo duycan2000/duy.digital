@@ -1,13 +1,15 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "duy-digital-web",
+  "account_id": "434cdc143e04717ff56f9970473b0f51",
   "compatibility_date": "2025-08-15",
   // Static site served by Workers Static Assets (no server code).
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page",
     "html_handling": "drop-trailing-slash"
-  }
+  },
+  "routes": [{ "pattern": "new.duy.digital", "custom_domain": true }]
   // Production: add a route for duy.digital once DNS is moved, e.g.
   // "routes": [{ "pattern": "duy.digital", "custom_domain": true }]
 }

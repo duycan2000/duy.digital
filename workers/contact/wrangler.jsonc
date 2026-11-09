@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "duy-digital-contact",
+  "account_id": "434cdc143e04717ff56f9970473b0f51",
   "main": "src/index.ts",
   "compatibility_date": "2025-08-15",
   "vars": {

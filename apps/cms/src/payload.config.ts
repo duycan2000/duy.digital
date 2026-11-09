@@ -77,6 +77,8 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
+  // Cloudflare Workers caps PBKDF2 at 100k iterations (Payload default is 600k)
+  auth: { passwordHashIterations: 100000 },
   admin: {
     user: Users.slug,
     meta: { titleSuffix: ' · Duy Digital CMS' },

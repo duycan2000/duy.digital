@@ -7,6 +7,8 @@ on:
 concurrency: { group: deploy-cms, cancel-in-progress: false }
 jobs:
   deploy:
+    # Enable after Cloudflare secrets are set: repo Settings → Variables → DEPLOY_ENABLED=true
+    if: ${{ vars.DEPLOY_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

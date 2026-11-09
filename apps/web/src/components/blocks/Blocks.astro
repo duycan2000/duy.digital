@@ -1,0 +1,15 @@
+---
+import Hero from './Hero.astro'
+import Content from './Content.astro'
+import Features from './Features.astro'
+import Pricing from './Pricing.astro'
+import ProjectsGrid from './ProjectsGrid.astro'
+import FAQ from './FAQ.astro'
+import Testimonials from './Testimonials.astro'
+import CTA from './CTA.astro'
+import ContactForm from './ContactForm.astro'
+import LatestPosts from './LatestPosts.astro'
+const map: Record<string, any> = { hero: Hero, content: Content, features: Features, pricing: Pricing, projectsGrid: ProjectsGrid, faq: FAQ, testimonials: Testimonials, cta: CTA, contactForm: ContactForm, latestPosts: LatestPosts }
+const { blocks = [], locale = 'en' } = Astro.props as { blocks: any[]; locale?: string }
+---
+{blocks.map((b) => { const C = map[b.blockType]; return C ? <C b={b} locale={locale} /> : null })}

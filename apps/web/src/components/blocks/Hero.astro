@@ -1,0 +1,35 @@
+---
+import { mediaUrl } from '../../lib/cms'
+const { b } = Astro.props as { b: any }
+const imgs = (b.images ?? []).map((m: any) => ({ src: mediaUrl(m), alt: m?.alt ?? '' })).filter((i: any) => i.src)
+---
+<section class="hero section">
+  <div class="wrap hero-in">
+    <div>
+      {b.eyebrow && <p class="pill"><span class="live"></span>{b.eyebrow}</p>}
+      <h1>{b.heading} {b.highlight && <em class="hl">{b.highlight}</em>}</h1>
+      {b.subheading && <p class="lead">{b.subheading}</p>}
+      <div class="ctas">
+        {b.primaryCta?.href && <a class="btn btn-primary" href={b.primaryCta.href}>{b.primaryCta.label} →</a>}
+        {b.secondaryCta?.href && <a class="btn btn-ghost" href={b.secondaryCta.href}>{b.secondaryCta.label}</a>}
+      </div>
+    </div>
+    {imgs.length > 0 && (
+      <div class="frames">
+        {imgs.map((i: any, n: number) => <img class={`f f${n}`} src={i.src} alt={i.alt} width="1600" height="1000" loading={n === 0 ? 'eager' : 'lazy'} fetchpriority={n === 0 ? 'high' : 'auto'} />)}
+      </div>
+    )}
+  </div>
+</section>
+<style>
+  .hero-in { display: grid; gap: 48px; align-items: center; }
+  @media (min-width: 960px) { .hero-in { grid-template-columns: 1.05fr 1fr; } }
+  .pill { display: inline-flex; gap: 8px; align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px; font: 500 0.75rem/1 var(--f-mono); text-transform: uppercase; letter-spacing: 0.06em; }
+  .live { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+  .lead { font-size: 1.15rem; max-width: 34ch; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .frames { position: relative; aspect-ratio: 16 / 12; }
+  .f { position: absolute; border-radius: 14px; box-shadow: 0 30px 60px rgba(22, 20, 18, 0.25); aspect-ratio: 16 / 10; object-fit: cover; object-position: top; }
+  .f0 { width: 82%; top: 0; right: 0; }
+  .f1 { width: 62%; bottom: 0; left: 0; }
+</style>

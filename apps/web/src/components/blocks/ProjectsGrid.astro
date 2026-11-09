@@ -1,0 +1,19 @@
+---
+import { cms } from '../../lib/cms'
+import ProjectCard from '../ProjectCard.astro'
+const { b, locale = 'en' } = Astro.props as { b: any; locale?: any }
+let items: any[] = []
+if (b.source === 'manual') items = (b.projects ?? []).filter((p: any) => typeof p === 'object')
+else {
+  const all = await cms.all('projects', locale, { sort: 'order' })
+  items = b.source === 'industry' ? all.filter((p) => p.industry === b.industry) : all.filter((p) => p.featured)
+}
+items = items.slice(0, b.limit ?? 6)
+---
+<section class="section">
+  <div class="wrap">
+    {b.heading && <h2>{b.heading}</h2>}
+    <div class="grid grid-3">{items.map((p) => <ProjectCard p={p} />)}</div>
+    <p style="margin-top:32px"><a class="btn btn-ghost" href="/work">See all work</a></p>
+  </div>
+</section>

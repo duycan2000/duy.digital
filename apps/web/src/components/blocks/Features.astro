@@ -1,0 +1,15 @@
+---
+const { b } = Astro.props as { b: any }
+---
+<section class="section">
+  <div class="wrap">
+    {b.heading && <h2>{b.heading}</h2>}
+    {b.intro && <p class="intro">{b.intro}</p>}
+    <div class="grid grid-3">
+      {(b.items ?? []).map((i: any) => (
+        <div class="card"><span class="ico">{i.icon}</span><h3>{i.title}</h3><p>{i.text}</p></div>
+      ))}
+    </div>
+  </div>
+</section>
+<style>.intro{max-width:60ch;margin-bottom:32px}.ico{font-size:1.6rem}</style>

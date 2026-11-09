@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro'
+import Blocks from '../components/blocks/Blocks.astro'
+import { cms, mediaUrl } from '../lib/cms'
+const home = (await cms.all('pages', 'en', { 'where[pageType][equals]': 'home', limit: 1 }))[0]
+---
+<Base title={home?.meta?.title ?? 'Duy Digital — Websites that bring you customers'} description={home?.meta?.description ?? 'Custom WordPress & fast static websites for small businesses in Australia, NZ & Germany.'} image={mediaUrl(home?.meta?.image)}>
+  {home ? <Blocks blocks={home.layout} /> : (
+    <section class="section"><div class="wrap"><h1>Websites that bring you <em class="hl">customers.</em></h1><p>Content is loading from the CMS. Set <code>CMS_URL</code> and rebuild.</p></div></section>
+  )}
+</Base>

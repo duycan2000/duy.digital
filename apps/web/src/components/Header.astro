@@ -1,0 +1,49 @@
+---
+const { nav, settings } = Astro.props as { nav: any; settings: any }
+const links: { label: string; href: string }[] = nav?.header?.length
+  ? nav.header
+  : [
+      { label: 'Work', href: '/work' },
+      { label: 'Services', href: '/services' },
+      { label: 'About', href: '/about' },
+      { label: 'Blog', href: '/blog' },
+    ]
+const cta = nav?.headerCta?.href ? nav.headerCta : { label: 'Book a call', href: settings?.bookingUrl ?? '/contact' }
+---
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="logo" aria-label="Duy Digital – home">
+      <img src="/favicon.png" width="28" height="28" alt="" />
+      <span>Duy<span class="dot">.</span>Digital</span>
+    </a>
+    <nav aria-label="Main">
+      <ul>
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    <a class="btn btn-primary hdr-cta" href={cta.href}>{cta.label}</a>
+    <details class="mnav">
+      <summary aria-label="Menu">☰</summary>
+      <ul>
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        <li><a href={cta.href}>{cta.label}</a></li>
+      </ul>
+    </details>
+  </div>
+</header>
+<style>
+  .hdr { position: sticky; top: 0; z-index: 50; background: rgba(239, 234, 225, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .hdr-in { display: flex; align-items: center; gap: 24px; height: 72px; }
+  .logo { display: flex; align-items: center; gap: 10px; font: 800 1.15rem/1 var(--f-display); color: var(--ink); text-decoration: none; margin-right: auto; }
+  .logo img { border-radius: 6px; }
+  .dot { color: var(--clay); }
+  nav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+  nav a { color: var(--ink); text-decoration: none; font-weight: 500; }
+  nav a:hover { color: var(--clay-dark); }
+  .mnav { display: none; position: relative; }
+  .mnav summary { list-style: none; cursor: pointer; font-size: 1.4rem; color: var(--ink); }
+  .mnav ul { position: absolute; right: 0; top: 44px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 20px; list-style: none; min-width: 200px; }
+  .mnav li { padding: 8px 0; }
+  .mnav a { color: var(--ink); text-decoration: none; }
+  @media (max-width: 860px) { nav, .hdr-cta { display: none; } .mnav { display: block; } }
+</style>

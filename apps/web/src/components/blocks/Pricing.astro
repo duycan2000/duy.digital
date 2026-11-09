@@ -1,0 +1,19 @@
+---
+const { b } = Astro.props as { b: any }
+---
+<section class="section" id="pricing">
+  <div class="wrap">
+    {b.heading && <h2>{b.heading}</h2>}
+    <div class="grid grid-3">
+      {(b.plans ?? []).map((p: any) => (
+        <div class={`card plan ${p.highlighted ? 'hot' : ''}`}>
+          <h3>{p.name}</h3>
+          <p class="price">{p.price} <small>{p.period}</small></p>
+          <ul>{(p.features ?? []).map((f: string) => <li>{f}</li>)}</ul>
+          {p.ctaHref && <a class="btn btn-primary" href={p.ctaHref}>Get started</a>}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+<style>.price{font:800 2rem/1 var(--f-display);color:var(--ink)}.price small{font:400 .9rem var(--f-body);color:var(--muted)}.plan ul{padding-left:1.1em}.hot{border:2px solid var(--clay)}</style>

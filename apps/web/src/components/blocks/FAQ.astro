@@ -1,0 +1,12 @@
+---
+const { b } = Astro.props as { b: any }
+---
+<section class="section">
+  <div class="wrap prose">
+    {b.heading && <h2>{b.heading}</h2>}
+    {(b.items ?? []).map((q: any) => (
+      <details class="faq"><summary>{q.question}</summary><p>{q.answer}</p></details>
+    ))}
+  </div>
+</section>
+<style>.faq{border-bottom:1px solid var(--border);padding:16px 0}.faq summary{cursor:pointer;font-weight:600;color:var(--ink)}</style>

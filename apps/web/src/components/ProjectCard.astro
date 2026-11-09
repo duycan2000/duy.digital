@@ -1,0 +1,21 @@
+---
+import { mediaUrl } from '../lib/cms'
+const { p } = Astro.props as { p: any }
+const img = mediaUrl(p.cover)
+---
+<a class="pc" href={`/work/${p.slug}`}>
+  {img && <img src={img} alt={p.cover?.alt ?? p.title} width="1600" height="1000" loading="lazy" decoding="async" />}
+  <div class="pc-meta">
+    <span class="eyebrow">{[p.industry, p.market].filter(Boolean).join(' · ')}</span>
+    <h3>{p.title}</h3>
+    {p.tagline && <p>{p.tagline}</p>}
+  </div>
+</a>
+<style>
+  .pc { display: block; text-decoration: none; color: inherit; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
+  .pc:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(22, 20, 18, 0.12); }
+  .pc img { aspect-ratio: 16 / 10; object-fit: cover; object-position: top; width: 100%; }
+  .pc-meta { padding: 20px 22px 24px; }
+  .pc-meta h3 { margin: 8px 0 4px; }
+  .pc-meta p { margin: 0; font-size: 0.95rem; }
+</style>

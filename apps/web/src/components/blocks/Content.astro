@@ -1,0 +1,5 @@
+---
+import { renderRichText } from '../../lib/richtext'
+const { b } = Astro.props as { b: any }
+---
+<section class="section"><div class="wrap prose" set:html={renderRichText(b.body)} /></section>

@@ -1,0 +1,42 @@
+---
+import '../styles/global.css'
+import Seo from '../components/Seo.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import { cms, type Locale } from '../lib/cms'
+import { organization } from '../lib/schema'
+
+interface Props {
+  title: string
+  description?: string
+  image?: string
+  canonical?: string
+  noindex?: boolean
+  type?: 'website' | 'article'
+  locale?: Locale
+  alternates?: { locale: string; href: string }[]
+  jsonLd?: (object | null | undefined)[]
+}
+const { locale = 'en', jsonLd = [], ...seo } = Astro.props
+const [settings, nav] = await Promise.all([cms.global('settings', locale), cms.global('navigation', locale)])
+---
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.png" />
+    <link rel="preload" href="/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/fonts/fonts.css" />
+    <Seo {...seo} jsonLd={[organization(settings), ...jsonLd]} />
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <Header nav={nav} settings={settings} />
+    <main id="content">
+      <slot />
+    </main>
+    <Footer nav={nav} settings={settings} />
+  </body>
+</html>

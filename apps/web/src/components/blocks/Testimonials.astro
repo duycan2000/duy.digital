@@ -1,0 +1,11 @@
+---
+const { b } = Astro.props as { b: any }
+---
+<section class="section dark">
+  <div class="wrap grid grid-2">
+    {(b.items ?? []).map((t: any) => (
+      <figure class="card t"><blockquote>“{t.quote}”</blockquote><figcaption>— {t.author}{t.role && `, ${t.role}`}</figcaption></figure>
+    ))}
+  </div>
+</section>
+<style>.t{background:var(--dark-card);border-color:var(--dark-border);margin:0}.t blockquote{margin:0 0 12px;font:1.25rem/1.4 var(--f-serif);color:var(--cream)}</style>

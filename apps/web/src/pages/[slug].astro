@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro'
+import Blocks from '../components/blocks/Blocks.astro'
+import { cms, mediaUrl } from '../lib/cms'
+import { breadcrumb, service } from '../lib/schema'
+
+export async function getStaticPaths() {
+  const pages = await cms.all('pages', 'en')
+  return pages.filter((p) => p.pageType !== 'home' && p.slug).map((p) => ({ params: { slug: p.slug }, props: { page: p } }))
+}
+const { page } = Astro.props as { page: any }
+const url = `/${page.slug}`
+const ld = [breadcrumb([{ name: 'Home', url: '/' }, { name: page.title, url }])]
+if (page.pageType === 'service' || page.pageType === 'industry') ld.push(service(page, url) as any)
+---
+<Base title={page.meta?.title ?? `${page.title} | Duy Digital`} description={page.meta?.description} image={mediaUrl(page.meta?.image)} noindex={page.noindex} jsonLd={ld}>
+  <Blocks blocks={page.layout} />
+</Base>

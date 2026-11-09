@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro'
+import ProjectCard from '../../components/ProjectCard.astro'
+import { cms } from '../../lib/cms'
+const projects = await cms.all('projects', 'en', { sort: 'order' })
+const cats = [
+  { v: 'all', l: 'All' },
+  { v: 'website', l: 'Websites' },
+  { v: 'store', l: 'Online stores' },
+  { v: 'agency', l: 'Agency work' },
+]
+---
+<Base title="Work — Websites & online stores | Duy Digital" description="Selected WordPress, WooCommerce and Shopify projects for small businesses in Australia, New Zealand, Germany and beyond.">
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Portfolio</p>
+      <h1>Selected <em class="hl">work</em></h1>
+      <div class="filters" role="tablist">
+        {cats.map((c, i) => <button role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-f={c.v}>{c.l}</button>)}
+      </div>
+      <div class="grid grid-3" id="wg">
+        {projects.map((p) => <div data-cat={p.category}><ProjectCard p={p} /></div>)}
+      </div>
+    </div>
+  </section>
+</Base>
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>('.filters button')
+  btns.forEach((b) => b.addEventListener('click', () => {
+    btns.forEach((x) => x.setAttribute('aria-selected', String(x === b)))
+    document.querySelectorAll<HTMLElement>('#wg [data-cat]').forEach((el) => { el.hidden = b.dataset.f !== 'all' && el.dataset.cat !== b.dataset.f })
+  }))
+</script>
+<style>
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 36px; }
+  .filters button { font: 500 0.9rem var(--f-body); padding: 8px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); cursor: pointer; }
+  .filters button[aria-selected='true'] { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+</style>

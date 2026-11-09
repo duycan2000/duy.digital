@@ -1,0 +1,36 @@
+---
+const { nav, settings } = Astro.props as { nav: any; settings: any }
+const cols = nav?.footerColumns ?? []
+const year = new Date().getFullYear()
+---
+<footer class="ftr section dark">
+  <div class="wrap">
+    <div class="ftr-top">
+      <div>
+        <p class="ftr-big">Let’s build something <em class="hl">good.</em></p>
+        {settings?.email && <a class="ftr-mail" href={`mailto:${settings.email}`}>{settings.email}</a>}
+      </div>
+      <div class="ftr-cols">
+        {cols.map((c: any) => (
+          <div>
+            <p class="eyebrow">{c.title}</p>
+            <ul>{c.links?.map((l: any) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+    <p class="ftr-bottom">© {year} Duy Digital · Da Nang, Vietnam · Working with AU · NZ · DE · US · CA</p>
+  </div>
+</footer>
+<style>
+  .ftr-top { display: grid; gap: 40px; }
+  @media (min-width: 860px) { .ftr-top { grid-template-columns: 1.2fr 1fr; } }
+  .ftr-big { font: 800 clamp(2rem, 5vw, 3.4rem)/1.05 var(--f-display); color: var(--cream); margin: 0 0 16px; }
+  .ftr-mail { color: var(--cream); font-size: 1.2rem; }
+  .ftr-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 24px; }
+  .ftr-cols ul { list-style: none; padding: 0; margin: 12px 0 0; }
+  .ftr-cols li { margin: 6px 0; }
+  .ftr-cols a { color: var(--dark-body); text-decoration: none; }
+  .ftr-cols a:hover { color: var(--cream); }
+  .ftr-bottom { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--dark-border); font-size: 0.85rem; }
+</style>

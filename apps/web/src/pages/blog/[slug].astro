@@ -1,0 +1,84 @@
+---
+import Base from '../../layouts/Base.astro'
+import PostCard from '../../components/PostCard.astro'
+import ContactForm from '../../components/blocks/ContactForm.astro'
+import { cms, mediaUrl } from '../../lib/cms'
+import { renderRichText, type TocItem } from '../../lib/richtext'
+import { blogPosting, breadcrumb, faqPage } from '../../lib/schema'
+
+export async function getStaticPaths() {
+  const posts = await cms.all('posts', 'en', { sort: '-publishedAt' })
+  return posts.filter((p) => p.slug).map((p) => ({ params: { slug: p.slug }, props: { p, all: posts } }))
+}
+const { p, all } = Astro.props as { p: any; all: any[] }
+const url = `/blog/${p.slug}`
+const cover = mediaUrl(p.cover)
+const toc: TocItem[] = []
+const html = renderRichText(p.content, toc)
+const related = (p.relatedPosts?.length ? p.relatedPosts.filter((x: any) => typeof x === 'object') : all.filter((x) => x.id !== p.id && (x.categories ?? []).some((c: any) => (p.categories ?? []).some((d: any) => (d?.id ?? d) === (c?.id ?? c))))).slice(0, 3)
+const date = (d?: string) => (d ? new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }) : '')
+const author = typeof p.author === 'object' ? p.author : null
+---
+<Base
+  title={p.meta?.title ?? `${p.title} | Duy Digital`}
+  description={p.meta?.description ?? p.excerpt}
+  image={mediaUrl(p.meta?.image) ?? cover}
+  canonical={p.canonical || undefined}
+  noindex={p.noindex}
+  type="article"
+  jsonLd={[blogPosting(p, url, cover), breadcrumb([{ name: 'Home', url: '/' }, { name: 'Blog', url: '/blog' }, { name: p.title, url }]), faqPage(p.faq)]}
+>
+  <article class="section">
+    <div class="wrap">
+      <nav class="bc" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a></nav>
+      <h1>{p.title}</h1>
+      <p class="meta">
+        {author && <span>By <a href="/about">{author.name}</a></span>}
+        <span>Updated {date(p.updatedAt)}</span>
+        {p.readingTime && <span>{p.readingTime} min read</span>}
+      </p>
+      {cover && <img class="cover" src={cover} alt={p.cover?.alt ?? ''} width="1200" height="630" fetchpriority="high" />}
+      <div class="layout">
+        <div class="prose">
+          {p.quickAnswer && <div class="qa"><p class="eyebrow">Quick answer</p><p>{p.quickAnswer}</p></div>}
+          {p.keyTakeaways?.length > 0 && <div class="kt"><p class="eyebrow">Key takeaways</p><ul>{p.keyTakeaways.map((k: any) => <li>{k.point}</li>)}</ul></div>}
+          <Fragment set:html={html} />
+          {p.faq?.length > 0 && (
+            <section><h2 id="faq">FAQ</h2>{p.faq.map((q: any) => <details class="faq"><summary>{q.question}</summary><p>{q.answer}</p></details>)}</section>
+          )}
+          {author && (
+            <aside class="author card">
+              {author.avatar && <img src={mediaUrl(author.avatar)} alt={author.name} width="72" height="72" loading="lazy" />}
+              <div><strong>{author.name}</strong>{author.jobTitle && <span> · {author.jobTitle}</span>}<p>{author.bio}</p></div>
+            </aside>
+          )}
+        </div>
+        {toc.length > 2 && (
+          <aside class="toc card"><p class="eyebrow">On this page</p><ol>{toc.map((t) => <li class={`d${t.depth}`}><a href={`#${t.id}`}>{t.text}</a></li>)}</ol>
+          <a class="btn btn-primary" href="#contact">Get a free quote</a></aside>
+        )}
+      </div>
+    </div>
+  </article>
+  <ContactForm b={{ heading: 'Want this done for you?' }} />
+  {related.length > 0 && <section class="section"><div class="wrap"><h2>Related guides</h2><div class="grid grid-3">{related.map((r: any) => <PostCard p={r} />)}</div></div></section>}
+</Base>
+<style>
+  .bc { font-size: 0.85rem; margin-bottom: 16px; }
+  .bc a { color: var(--muted); }
+  .meta { display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.9rem; color: var(--muted); }
+  .cover { border-radius: var(--radius); margin: 32px 0; width: 100%; aspect-ratio: 1200/630; object-fit: cover; }
+  .layout { display: grid; gap: 48px; }
+  @media (min-width: 1024px) { .layout { grid-template-columns: minmax(0, 720px) 280px; justify-content: space-between; } }
+  .qa, .kt { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--clay); border-radius: 12px; padding: 18px 22px; margin-bottom: 24px; }
+  .qa p:last-child { margin: 6px 0 0; color: var(--ink); font-weight: 500; }
+  .toc { position: sticky; top: 96px; align-self: start; font-size: 0.92rem; }
+  .toc ol { padding-left: 1.1em; }
+  .toc .d3 { margin-left: 12px; list-style: circle; }
+  .toc a { color: var(--ink); text-decoration: none; }
+  .faq { border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .faq summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+  .author { display: flex; gap: 16px; margin-top: 48px; }
+  .author img { border-radius: 50%; width: 72px; height: 72px; object-fit: cover; }
+  @media (max-width: 1023px) { .toc { display: none; } }
+</style>

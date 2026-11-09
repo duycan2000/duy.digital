@@ -1,0 +1,21 @@
+---
+import { mediaUrl } from '../lib/cms'
+const { p } = Astro.props as { p: any }
+const img = mediaUrl(p.cover)
+const date = p.publishedAt ? new Date(p.publishedAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }) : ''
+---
+<a class="pc" href={`/blog/${p.slug}`}>
+  {img && <img src={img} alt={p.cover?.alt ?? ''} width="1200" height="630" loading="lazy" decoding="async" />}
+  <div class="m">
+    <span class="eyebrow">{date}{p.readingTime && ` · ${p.readingTime} min read`}</span>
+    <h3>{p.title}</h3>
+    {p.excerpt && <p>{p.excerpt}</p>}
+  </div>
+</a>
+<style>
+  .pc { display: block; text-decoration: none; color: inherit; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .pc img { aspect-ratio: 1200 / 630; object-fit: cover; width: 100%; }
+  .m { padding: 20px 22px 24px; }
+  .m h3 { margin: 8px 0 6px; }
+  .m p { margin: 0; font-size: 0.95rem; }
+</style>

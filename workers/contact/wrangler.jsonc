@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "duy-digital-contact",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-08-15",
+  "vars": {
+    "ALLOWED_ORIGINS": "https://duy.digital,https://www.duy.digital,http://localhost:4321",
+    "CMS_URL": "https://cms.duy.digital"
+  },
+  // Served on the site domain so the form posts same-origin:
+  // "routes": [{ "pattern": "duy.digital/api/contact", "zone_name": "duy.digital" }]
+  //
+  // Secrets (wrangler secret put …):
+  //   TURNSTILE_SECRET   – Cloudflare Turnstile secret key
+  //   CMS_API_KEY        – Payload user API key (to create `leads`)
+  //   LEAD_WEBHOOK_URL   – Duy's personal app endpoint
+  //   LEAD_WEBHOOK_TOKEN – shared secret sent as Authorization: Bearer …
+}

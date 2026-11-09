@@ -1,0 +1,11 @@
+---
+const { b } = Astro.props as { b: any }
+---
+<section class="section">
+  <div class="wrap cta card">
+    <h2>{b.heading}</h2>
+    {b.text && <p>{b.text}</p>}
+    {b.button?.href && <a class="btn btn-primary" href={b.button.href}>{b.button.label} →</a>}
+  </div>
+</section>
+<style>.cta{text-align:center;padding:56px 28px}.cta p{max-width:52ch;margin:0 auto 24px}</style>

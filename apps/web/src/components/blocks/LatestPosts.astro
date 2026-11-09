@@ -1,0 +1,19 @@
+---
+import { cms } from '../../lib/cms'
+import PostCard from '../PostCard.astro'
+const { b, locale = 'en' } = Astro.props as { b: any; locale?: any }
+let posts = await cms.all('posts', locale, { sort: '-publishedAt', limit: 50 })
+if (b.category) {
+  const cid = typeof b.category === 'object' ? b.category.id : b.category
+  posts = posts.filter((p) => (p.categories ?? []).some((c: any) => (c?.id ?? c) === cid))
+}
+posts = posts.slice(0, b.limit ?? 3)
+---
+{posts.length > 0 && (
+  <section class="section">
+    <div class="wrap">
+      {b.heading && <h2>{b.heading}</h2>}
+      <div class="grid grid-3">{posts.map((p) => <PostCard p={p} />)}</div>
+    </div>
+  </section>
+)}

@@ -1,0 +1,19 @@
+{
+  "name": "@duy/web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/gen-redirects.mjs",
+    "preview": "wrangler dev",
+    "deploy": "pnpm build && wrangler deploy"
+  },
+  "dependencies": {
+    "astro": "^5.13.0",
+    "@astrojs/sitemap": "^3.5.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.30.0",
+    "typescript": "^5.7.0"
+  }
+}

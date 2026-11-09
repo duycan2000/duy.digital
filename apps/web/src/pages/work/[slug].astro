@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro'
+import ProjectCard from '../../components/ProjectCard.astro'
+import { cms, mediaUrl } from '../../lib/cms'
+import { renderRichText } from '../../lib/richtext'
+import { breadcrumb, creativeWork } from '../../lib/schema'
+
+export async function getStaticPaths() {
+  const all = await cms.all('projects', 'en', { sort: 'order' })
+  return all.filter((p) => p.slug).map((p, i) => ({ params: { slug: p.slug }, props: { p, next: all[(i + 1) % all.length] } }))
+}
+const { p, next } = Astro.props as { p: any; next: any }
+const url = `/work/${p.slug}`
+const cover = mediaUrl(p.cover)
+---
+<Base title={p.meta?.title ?? `${p.title} — Case study | Duy Digital`} description={p.meta?.description ?? p.excerpt} image={mediaUrl(p.meta?.image) ?? cover} jsonLd={[breadcrumb([{ name: 'Home', url: '/' }, { name: 'Work', url: '/work' }, { name: p.title, url }]), creativeWork(p, url, cover)]}>
+  <article>
+    <header class="section wrap">
+      <p class="eyebrow">{[p.industry, p.market, p.year].filter(Boolean).join(' · ')}</p>
+      <h1>{p.title}</h1>
+      {p.tagline && <p class="lead">{p.tagline}</p>}
+      {p.liveUrl && <a class="btn btn-ghost" href={p.liveUrl} rel="noopener" target="_blank">Visit live site ↗</a>}
+      {cover && <img class="cover" src={cover} alt={p.cover?.alt ?? p.title} width="1600" height="1000" fetchpriority="high" />}
+    </header>
+    {p.results?.length > 0 && (
+      <section class="wrap results">{p.results.map((r: any) => <div><strong>{r.value}</strong><span>{r.label}</span></div>)}</section>
+    )}
+    <section class="section wrap cs">
+      <div class="prose">
+        {p.challenge && <><h2>The challenge</h2><Fragment set:html={renderRichText(p.challenge)} /></>}
+        {p.solution && <><h2>What we built</h2><Fragment set:html={renderRichText(p.solution)} /></>}
+        {p.solutionList?.length > 0 && <ul class="dd-ul">{p.solutionList.map((s: any) => <li>{s.item}</li>)}</ul>}
+      </div>
+      <aside class="card side">
+        {p.client && <p><span class="eyebrow">Client</span><br />{p.client}</p>}
+        {p.services?.length > 0 && <p><span class="eyebrow">Services</span><br />{p.services.join(', ')}</p>}
+        {p.stack?.length > 0 && <p><span class="eyebrow">Stack</span><br />{p.stack.join(', ')}</p>}
+      </aside>
+    </section>
+    {p.gallery?.length > 0 && <section class="wrap gallery">{p.gallery.map((g: any) => <img src={mediaUrl(g.image)} alt={g.image?.alt ?? ''} loading="lazy" />)}</section>}
+    {p.testimonial?.quote && <section class="section dark"><blockquote class="wrap tq">“{p.testimonial.quote}”<cite>— {p.testimonial.author}{p.testimonial.role && `, ${p.testimonial.role}`}</cite></blockquote></section>}
+    {next && next.slug !== p.slug && <section class="section wrap"><p class="eyebrow">Next project</p><div class="grid grid-3"><ProjectCard p={next} /></div></section>}
+  </article>
+</Base>
+<style>
+  .lead { font-size: 1.2rem; max-width: 50ch; }
+  .cover { margin-top: 40px; border-radius: var(--radius); aspect-ratio: 16 / 10; object-fit: cover; object-position: top; width: 100%; }
+  .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+  .results div { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+  .results strong { display: block; font: 800 2rem/1 var(--f-display); color: var(--clay-dark); }
+  .cs { display: grid; gap: 40px; }
+  @media (min-width: 960px) { .cs { grid-template-columns: 1fr 300px; } }
+  .side { align-self: start; position: sticky; top: 96px; }
+  .gallery { display: grid; gap: 20px; }
+  .gallery img { border-radius: var(--radius); }
+  .tq { font: 1.6rem/1.35 var(--f-serif); color: var(--cream); margin: 0 auto; }
+  .tq cite { display: block; margin-top: 16px; font: 0.95rem var(--f-body); color: var(--dark-body); }
+</style>

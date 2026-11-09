@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro'
+import PostCard from '../../components/PostCard.astro'
+import { cms } from '../../lib/cms'
+const posts = await cms.all('posts', 'en', { sort: '-publishedAt' })
+const visible = posts.filter((p) => !p.noindex)
+---
+<Base title="Blog — Plain-English guides on websites & IT for small business | Duy Digital" description="Honest guides on website costs, WordPress, email and IT for small business owners — no jargon.">
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Journal</p>
+      <h1>Guides for <em class="hl">busy owners</em></h1>
+      <div class="grid grid-3" style="margin-top:40px">{visible.map((p) => <PostCard p={p} />)}</div>
+      {visible.length === 0 && <p>No posts yet.</p>}
+    </div>
+  </section>
+</Base>

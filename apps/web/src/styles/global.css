@@ -16,11 +16,11 @@
   --dark-body: #b9b2a4;
   --green: #3fae5a;
 
-  --f-display: 'Bricolage Grotesque', system-ui, sans-serif;
-  --f-body: 'Inter', system-ui, sans-serif;
+  --f-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif;
+  --f-body: 'Inter Variable', 'Inter', system-ui, sans-serif;
   --f-serif: 'Instrument Serif', Georgia, serif;
   --f-hand: 'Caveat', cursive;
-  --f-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --f-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
 
   --radius: 16px;
   --wrap: 1200px;

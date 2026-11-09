@@ -1,4 +1,10 @@
 ---
+import '@fontsource-variable/bricolage-grotesque/wght.css'
+import '@fontsource-variable/inter/wght.css'
+import '@fontsource/instrument-serif/400.css'
+import '@fontsource/instrument-serif/400-italic.css'
+import '@fontsource/caveat/600.css'
+import '@fontsource-variable/jetbrains-mono/wght.css'
 import '../styles/global.css'
 import Seo from '../components/Seo.astro'
 import Header from '../components/Header.astro'
@@ -25,10 +31,7 @@ const [settings, nav] = await Promise.all([cms.global('settings', locale), cms.g
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/favicon.png" />
-    <link rel="preload" href="/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="/fonts/fonts.css" />
+    <link rel="icon" href={settings?.favicon?.url ?? "/favicon.png"} />
     <Seo {...seo} jsonLd={[organization(settings), ...jsonLd]} />
   </head>
   <body>

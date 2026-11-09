@@ -67,7 +67,9 @@ const cloudflare =
 
 export default buildConfig({
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || '',
-  cors: [process.env.SITE_URL || 'https://duy.digital', 'http://localhost:4321'].filter(Boolean),
+  cors: [process.env.SITE_URL || 'https://duy.digital', 'https://new.duy.digital', 'http://localhost:4321'],
+  // allow cookie-auth requests from the site origin (used for one-off WordPress media migration)
+  csrf: [process.env.PAYLOAD_PUBLIC_SERVER_URL || '', process.env.SITE_URL || 'https://duy.digital'].filter(Boolean),
   localization: {
     locales: [
       { code: 'en', label: 'English' },
